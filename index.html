@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Visor Territorial de Trámites - Riobamba</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260928_fix3" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand-wrap">
+      <div class="brand-mark" aria-hidden="true">
+        <span class="sq s1"></span><span class="sq s2"></span><span class="sq s3"></span><span class="sq s4"></span>
+        <b>R</b>
+      </div>
+      <div>
+        <div class="eyebrow">GAD Municipal de Riobamba · Gestión territorial</div>
+        <h1 id="appTitle">Visor Territorial de Trámites</h1>
+        <p id="appSubtitle">Distribución espacial, estado y tiempos de atención de trámites municipales</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="btnHome" class="btn secondary">⌂ Vista inicial</button>
+      <button id="btnReload" class="btn secondary">↻ Recargar</button>
+    </div>
+  </header>
+  <div class="brand-stripe" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <section class="panel filters-panel">
+        <div class="panel-title-row">
+          <h2>Controles de análisis</h2><span class="pill" id="filterStatus">Sin filtros</span>
+        </div>
+
+        <label>Tipo de trámite
+          <select id="filterTipo"><option value="">Todos</option></select>
+        </label>
+
+        <label>Estado del trámite
+          <select id="filterEstado"><option value="">Todos</option></select>
+        </label>
+
+        <label>Agrupación territorial
+          <select id="territoryMode">
+            <option value="plataforma">Plataforma</option>
+            <option value="parroquia">Parroquia</option>
+          </select>
+        </label>
+
+        <label>Territorio
+          <select id="filterTerritorio"><option value="">Todos</option></select>
+        </label>
+
+        <div class="button-row">
+          <button id="btnApply" class="btn primary">Aplicar filtros</button>
+          <button id="btnClear" class="btn ghost">Limpiar</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Capas visibles</h2>
+        <div id="layerList" class="layer-list"></div>
+        <label class="toggle-row"><input type="checkbox" id="toggleHeat" /> Densidad de trámites</label>
+      </section>
+
+    </aside>
+
+    <section class="workspace">
+      <div class="kpi-grid">
+        <article class="kpi kpi-main"><span>Trámites únicos</span><strong id="kpiTotal">0</strong><small>según filtros</small></article>
+        <article class="kpi"><span>Ubicaciones mapeadas</span><strong id="kpiLocations">0</strong><small>puntos asociados</small></article>
+        <article class="kpi"><span>En proceso</span><strong id="kpiProcess">0</strong><small>trámites únicos</small></article>
+        <article class="kpi"><span>Finalizados</span><strong id="kpiFinished">0</strong><small>trámites únicos</small></article>
+        <article class="kpi"><span>Mediana de atención</span><strong id="kpiMedian">—</strong><small>días, con fechas válidas</small></article>
+        <article class="kpi"><span>Trámite más frecuente</span><strong id="kpiTopTipo">—</strong><small id="kpiTopTipoN">0 trámites</small></article>
+      </div>
+
+      <div class="hero-grid">
+        <article class="map-card">
+          <div id="map"></div>
+          <div id="mapMessage" class="map-message hidden"></div>
+          <div id="territoryInfo" class="territory-info hidden"></div>
+          <div class="map-legend" id="mapLegend">
+            <div class="legend-head"><b>Leyenda</b><span id="legendCount"></span></div>
+            <div id="legend"></div>
+          </div>
+        </article>
+
+        <div class="side-charts">
+          <article class="chart-card tall"><div class="chart-title"><h3>Trámites por tipo</h3><span>Totales únicos</span></div><canvas id="chartTipo"></canvas></article>
+          <article class="chart-card"><div class="chart-title"><h3>Estado de los trámites</h3><span>Totales únicos</span></div><canvas id="chartEstado"></canvas></article>
+        </div>
+      </div>
+
+      <div class="analysis-grid">
+        <article class="chart-card"><div class="chart-title"><h3 id="territoryChartTitle">Trámites por plataforma</h3><span>Totales únicos</span></div><canvas id="chartTerritorio"></canvas></article>
+        <article class="chart-card"><div class="chart-title"><h3>Ingresos vs. despachos por mes</h3><span>Comparación temporal</span></div><canvas id="chartFlujo"></canvas></article>
+        <article class="chart-card"><div class="chart-title"><h3>Tiempo mediano de atención</h3><span>Días por tipo de trámite</span></div><canvas id="chartDuracion"></canvas></article>
+      </div>
+
+      <article class="table-card">
+        <div class="panel-title-row"><h3>Detalle de trámites filtrados</h3><span id="tableCount" class="pill">0</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>N.º trámite</th><th>Tipo</th><th>Estado</th><th>Ingreso</th><th>Despacho</th><th>Días</th><th>Plataforma</th><th>Parroquia</th><th>Técnico</th></tr></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>Visor Territorial de Trámites · Riobamba · Leaflet + Chart.js · prototipo operativo</footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <script src="assets/js/config.js?v=20260928_fix3"></script>
+  <script src="assets/js/app.js?v=20260928_fix3"></script>
+</body>
+</html>
