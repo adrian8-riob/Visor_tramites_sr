@@ -54,6 +54,6 @@ window.APP_CONFIG = {
       style:{color:"#6B4F9B",weight:2,fillColor:"#B9A7D5",fillOpacity:0.045}},
     {id:"plataformas", name:"Plataformas territoriales", role:"platforms", type:"geojson", url:"data/plataformas_reales.geojson", visible:true,
       style:{color:"#C03A67",weight:2,fillColor:"#E8A5BC",fillOpacity:0.055}},
-    {id:"tramites", name:"Trámites", role:"procedures", type:"geojson", url:"data/tramites_actualizados.geojson", visible:true}
+    {{id:"tramites", name:"Trámites", role:"procedures", type:"geojson", url:"data/tramites_actualizados.geojson.json", visible:true}}
   ]
 };
