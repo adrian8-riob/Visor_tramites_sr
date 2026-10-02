@@ -1,6 +1,6 @@
 window.APP_CONFIG = {
   title: "Visor Territorial de Trámites - Riobamba",
-  subtitle: "Distribución espacial, estado y tiempos de atención de trámites municipales",
+  subtitle: "Distribución espacial y estado  de trámites municipales",
   initialView: [-1.6735, -78.6483],
   initialZoom: 12,
   basemap: {
